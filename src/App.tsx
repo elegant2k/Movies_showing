@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Movie } from './types/movie';
+import type { Movie } from './types/movie';
 import { tmdbService } from './services/tmdb';
 import { norwegianCities } from './data/cities';
 import { MovieCard } from './components/MovieCard';

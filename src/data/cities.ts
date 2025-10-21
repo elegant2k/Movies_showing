@@ -1,4 +1,4 @@
-import { NorwegianCity } from '../types/movie';
+import type { NorwegianCity } from '../types/movie';
 
 export const norwegianCities: NorwegianCity[] = [
   { name: 'Oslo', region: 'Oslo' },

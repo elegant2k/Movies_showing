@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { MovieDetails as MovieDetailsType } from '../types/movie';
+import type { MovieDetails as MovieDetailsType } from '../types/movie';
 import { tmdbService } from '../services/tmdb';
-import { omdbService, OMDBMovie } from '../services/omdb';
+import { omdbService, type OMDBMovie } from '../services/omdb';
 
 interface MovieDetailsProps {
   movieId: number;
