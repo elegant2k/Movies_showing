@@ -29,13 +29,28 @@ export const tmdbService = {
 
   // Get movie details including videos (trailers)
   getMovieDetails: async (movieId: number): Promise<MovieDetails> => {
+    // First get movie details in Norwegian
     const response = await fetch(
-      `${BASE_URL}/movie/${movieId}?api_key=${API_KEY}&language=no-NO&append_to_response=videos,external_ids`
+      `${BASE_URL}/movie/${movieId}?api_key=${API_KEY}&language=no-NO&append_to_response=external_ids`
     );
     if (!response.ok) {
       throw new Error('Failed to fetch movie details');
     }
-    return response.json();
+    const movieData = await response.json();
+
+    // Then get videos without language restriction to get all trailers
+    const videosResponse = await fetch(
+      `${BASE_URL}/movie/${movieId}/videos?api_key=${API_KEY}`
+    );
+    if (videosResponse.ok) {
+      const videosData = await videosResponse.json();
+      movieData.videos = videosData;
+      console.log('Videos data for movie:', movieId, videosData);
+    } else {
+      console.warn('Failed to fetch videos for movie:', movieId);
+    }
+
+    return movieData;
   },
 
   // Get movie external IDs (IMDB, etc.)
@@ -73,21 +88,36 @@ export const tmdbService = {
 
   // Get YouTube trailer URL
   getTrailerUrl: (videos?: { results: any[] }): string | null => {
+    console.log('Looking for trailer in videos:', videos);
+
     if (!videos || !videos.results || videos.results.length === 0) {
+      console.log('No videos available');
       return null;
     }
 
-    // Find official trailer
+    console.log('Available videos:', videos.results.map((v: any) => ({
+      name: v.name,
+      type: v.type,
+      site: v.site,
+      key: v.key,
+      official: v.official
+    })));
+
+    // Find official trailer on YouTube
     const trailer = videos.results.find(
       (v) => v.type === 'Trailer' && v.site === 'YouTube' && v.official
     ) || videos.results.find(
       (v) => v.type === 'Trailer' && v.site === 'YouTube'
+    ) || videos.results.find(
+      (v) => v.site === 'YouTube' // Any YouTube video as fallback
     );
 
     if (trailer) {
+      console.log('Found trailer:', trailer);
       return `https://www.youtube.com/watch?v=${trailer.key}`;
     }
 
+    console.log('No trailer found');
     return null;
   },
 

@@ -4,6 +4,7 @@ import { tmdbService } from './services/tmdb';
 import { norwegianCities } from './data/cities';
 import { MovieCard } from './components/MovieCard';
 import { MovieDetails } from './components/MovieDetails';
+import { ApiStatus } from './components/ApiStatus';
 import './App.css';
 
 function App() {
@@ -65,6 +66,8 @@ function App() {
         <h1>🎬 Kino Finder</h1>
         <p>Finn filmer som vises på kino i Norge</p>
       </header>
+
+      <ApiStatus />
 
       <div className="controls">
         <div className="city-selector">

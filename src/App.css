@@ -25,6 +25,64 @@
   opacity: 0.9;
 }
 
+/* API Status Banner */
+.api-status-banner {
+  background: linear-gradient(135deg, #fff3cd 0%, #fff8e1 100%);
+  border-bottom: 2px solid #ffc107;
+  padding: 1.5rem;
+}
+
+.api-status-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.api-status-content h3 {
+  margin: 0 0 0.75rem 0;
+  color: #856404;
+  font-size: 1.2rem;
+}
+
+.api-status-content p {
+  margin: 0.5rem 0;
+  color: #856404;
+  line-height: 1.6;
+}
+
+.api-status-content code {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+}
+
+.api-status-content ul {
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+  color: #856404;
+}
+
+.api-status-content li {
+  margin: 0.5rem 0;
+}
+
+.api-status-content a {
+  color: #0056b3;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.api-status-content a:hover {
+  color: #004085;
+}
+
+.api-status-note {
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-top: 1rem;
+  opacity: 0.9;
+}
+
 /* Controls */
 .controls {
   padding: 1.5rem;
