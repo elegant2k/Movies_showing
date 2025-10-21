@@ -22,8 +22,12 @@ export const MovieDetails: React.FC<MovieDetailsProps> = ({ movieId, onClose }) 
 
         // Fetch OMDB data if IMDB ID is available
         if (details.imdb_id) {
+          console.log('Fetching OMDB data for IMDB ID:', details.imdb_id);
           const omdbMovie = await omdbService.getMovieByImdbId(details.imdb_id);
+          console.log('OMDB data received:', omdbMovie);
           setOmdbData(omdbMovie);
+        } else {
+          console.log('No IMDB ID available for this movie');
         }
       } catch (error) {
         console.error('Error fetching movie details:', error);
@@ -52,8 +56,11 @@ export const MovieDetails: React.FC<MovieDetailsProps> = ({ movieId, onClose }) 
   const trailerUrl = tmdbService.getTrailerUrl(movie.videos);
   const imdbRating = omdbService.getImdbRating(omdbData);
   const rtScore = omdbService.getRottenTomatoesScore(omdbData);
+  const metascore = omdbService.getMetascore(omdbData);
   const daysInTheaters = tmdbService.getDaysInTheaters(movie.release_date);
   const daysRemaining = tmdbService.getDaysRemaining(movie.release_date);
+
+  console.log('Ratings:', { imdbRating, rtScore, metascore, tmdbRating: movie.vote_average });
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -118,35 +125,50 @@ export const MovieDetails: React.FC<MovieDetailsProps> = ({ movieId, onClose }) 
             </div>
           )}
 
-          {/* Ratings */}
-          <div className="ratings">
-            <div className="rating-item tmdb">
-              <div className="rating-source">TMDB</div>
-              <div className="rating-value">⭐ {movie.vote_average.toFixed(1)}/10</div>
-              <div className="rating-count">{movie.vote_count} stemmer</div>
+          {/* Ratings - Minimalist Icons */}
+          <div className="ratings-compact">
+            {/* TMDB */}
+            <div className="rating-badge tmdb-badge" title={`TMDB: ${movie.vote_average.toFixed(1)}/10 (${movie.vote_count} stemmer)`}>
+              <span className="rating-icon">⭐</span>
+              <span className="rating-text">
+                <span className="rating-label">TMDB</span>
+                <span className="rating-score">{movie.vote_average.toFixed(1)}</span>
+              </span>
             </div>
 
+            {/* IMDB */}
             {imdbRating && (
-              <div className="rating-item imdb">
-                <div className="rating-source">IMDB</div>
-                <div className="rating-value">⭐ {imdbRating}/10</div>
-                {movie.imdb_id && (
-                  <a
-                    href={`https://www.imdb.com/title/${movie.imdb_id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rating-link"
-                  >
-                    Se på IMDB →
-                  </a>
-                )}
+              <a
+                href={movie.imdb_id ? `https://www.imdb.com/title/${movie.imdb_id}` : '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rating-badge imdb-badge"
+                title={`IMDB: ${imdbRating}/10`}
+              >
+                <span className="rating-icon imdb-icon">IMDb</span>
+                <span className="rating-text">
+                  <span className="rating-score">{imdbRating}</span>
+                </span>
+              </a>
+            )}
+
+            {/* Rotten Tomatoes */}
+            {rtScore && (
+              <div className="rating-badge rt-badge" title={`Rotten Tomatoes: ${rtScore}`}>
+                <span className="rating-icon">🍅</span>
+                <span className="rating-text">
+                  <span className="rating-score">{rtScore}</span>
+                </span>
               </div>
             )}
 
-            {rtScore && (
-              <div className="rating-item rotten-tomatoes">
-                <div className="rating-source">Rotten Tomatoes</div>
-                <div className="rating-value">🍅 {rtScore}</div>
+            {/* Metascore */}
+            {metascore && (
+              <div className="rating-badge meta-badge" title={`Metascore: ${metascore}/100`}>
+                <span className="rating-icon meta-icon">M</span>
+                <span className="rating-text">
+                  <span className="rating-score">{metascore}</span>
+                </span>
               </div>
             )}
           </div>
